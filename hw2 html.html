@@ -14,11 +14,52 @@ Git-Hub:
 <!--
 
 body {  }
-h1 {  }
-div.dice {  }
-td.a {  }
-td.b {  }
-td.c {  }
+
+h1 
+{ 
+	text-align: center; 
+}
+
+div.dice 
+{ 
+	text-align: center; 
+}
+
+td.a 
+{ 
+	text-align: right; 
+}	
+
+td.b 
+{ 
+	border: 2px groove #ababab;
+	width: 60px;
+	height: 1.5em;
+	background-color: #acadfd;
+	
+}
+
+td.c 
+{ 
+	text-align: center; 
+	padding-left: 100px;
+}
+
+button.a 
+{  
+	font-family: "Times New Roman";
+	font-size: 13pt;
+	color: #f9ffde;
+	background-color: #5600cd;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+table
+{
+	margin-left: auto;
+	margin-right: auto;
+}
 
 -->
 </style>
@@ -26,22 +67,40 @@ td.c {  }
 
 <body>
 
+<script language="JavaScript">
+<!--
+
+function roll()
+{
+
+
+
+}
+
+
+-->
+</script>
+
+
 <h1> Yahtzee </h1>
 
 <div class="dice" > 
-	<img src="pics/dice0.gif">
-	<img src="pics/dice0.gif">
-	<img src="pics/dice0.gif">
-	<img src="pics/dice0.gif">
-	<img src="pics/dice0.gif">
+	<img id="d0" src="pics/dice0.gif">
+	<img id="d1" src="pics/dice0.gif">
+	<img id="d2" src="pics/dice0.gif">
+	<img id="d3" src="pics/dice0.gif">
+	<img id="d4" src="pics/dice0.gif">
 </div>
 
-<table border="1">
+<br>
+<br>
+
+<table>
 
 	<tr> 
 		<td class='a'> 1's </td> 
 		<td class='b'> </td> 
-		<td class='c' rowspan='5'> <button class='a'> Roll </button> </td> 
+		<td class='c' rowspan='5'> <button class='a' onClick='roll'> Roll </button> </td> 
 	</tr>
 
 	<tr> 

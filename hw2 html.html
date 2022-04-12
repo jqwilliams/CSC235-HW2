@@ -70,28 +70,43 @@ table
 <script language="JavaScript">
 <!--
 
+var v = new Array(0,0,0,0,0);
+var h = new Array(false,false,false,false,false);
+var r = 0;
+
 function roll()
 {
+	r++;
+	if(r<4)
+	{
+		for(var i=0;i<5;i++)
+		{
 
-	var dx0 = document.getElementById("d0");
-
-	dx0.src="pix/dice5.gif";
-
+			var a = document.getElementById("d"+i);
+			v[i] = Math.floor(6*Math.random()) + 1;
+			a.src="pics/dice"+v[i]+".gif";
+		}
+	}
 }
 
+function hold(x)
+{
+	var a = document.getElementById("d"+x);
+	a.src="pics/diceX"+v[x]+".gif";
+}
 
--->
+//-->
 </script>
 
 
 <h1> Yahtzee </h1>
 
-<div class="dice" > 
-	<img id="d0" src="pics/dice0.gif">
-	<img id="d1" src="pics/dice0.gif">
-	<img id="d2" src="pics/dice0.gif">
-	<img id="d3" src="pics/dice0.gif">
-	<img id="d4" src="pics/dice0.gif">
+<div class="dice"> 
+	<img id="d0" onClick="hold(0)" src="pics/dice0.gif">
+	<img id="d1" onClick="hold(1)" src="pics/dice0.gif">
+	<img id="d2" onClick="hold(2)" src="pics/dice0.gif">
+	<img id="d3" onClick="hold(3)" src="pics/dice0.gif">
+	<img id="d4" onClick="hold(4)" src="pics/dice0.gif">
 </div>
 
 <br>
@@ -102,7 +117,7 @@ function roll()
 	<tr> 
 		<td class='a'> 1's </td> 
 		<td class='b'> </td> 
-		<td class='c' rowspan='5'> <button class='a' onClick='roll'> Roll </button> </td> 
+		<td class='c' rowspan='5'> <button class='a' onClick='roll()'> Roll </button> </td> 
 	</tr>
 
 	<tr> 

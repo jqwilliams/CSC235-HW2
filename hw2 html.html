@@ -73,18 +73,29 @@ table
 var v = new Array(0,0,0,0,0);
 var h = new Array(false,false,false,false,false);
 var r = 0;
+var f = new Array(0,0,0,0,0,0);
 
 function roll()
 {
 	r++;
 	if(r<4)
 	{
+		f[1]=f[2]=f[3]=f[4]=f[5]=f[6]=0;
+		
+		
+		
 		for(var i=0;i<5;i++)
 		{
-
-			var a = document.getElementById("d"+i);
-			v[i] = Math.floor(6*Math.random()) + 1;
-			a.src="pics/dice"+v[i]+".gif";
+			if(!h[i])
+			{
+				var a = document.getElementById("d"+i);
+				v[i] = Math.floor(6*Math.random()) + 1;
+				a.src="pics/dice"+v[i]+".gif";
+			}
+			
+			f[v[i]]++;
+			
+			
 		}
 	}
 }
@@ -96,6 +107,12 @@ function hold(x)
 	
 	if(h[x]) {a.src="pics/diceX"+v[x]+".gif";}
 	else {a.src="pics/diceX"+v[x]+".gif";}
+}
+
+function scr(x)
+{
+	var a = document.getElementById("s"+x);
+	a.innerHTML = f[x]*x;
 }
 
 //-->
@@ -119,13 +136,28 @@ function hold(x)
 
 	<tr> 
 		<td class='a'> 1's </td> 
-		<td class='b'> </td> 
-		<td class='c' rowspan='5'> <button class='a' onClick='roll()'> Roll </button> </td> 
+		<td class='b' 
+			id='s1' 
+			onMouseOver="scr()" 
+			onMouseOut="clr()" 
+			onClick="clk()"> 
+		</td> 
+		
+		<td class='c' rowspan='5'> 
+		<button class='a' onClick='roll()'> Roll </button> 
+		</td> 
 	</tr>
 
 	<tr> 
-		<td class='a'> 2's </td> 
-		<td class='b'> </td> 
+		<td class='a'> 2's 
+		</td>
+		
+		<td class='b' 
+			id='s2' 
+			onMouseOver="scr(2)" 
+			onMouseOut="" 
+			onClick=""> 
+		</td> 
 	</tr>
 
 	<tr> 

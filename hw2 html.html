@@ -71,14 +71,15 @@ table
 <!--
 
 var v = new Array(0,0,0,0,0);
-var h = new Array(false,false,false,false,false);
-var r = 0;
+var held = new Array(false,false,false,false,false);
+var added_to_total = new Array(false,false,false,false,false);
+var num_rolls = 0;
 var f = new Array(0,0,0,0,0,0);
 
 function roll()
 {
-	r++;
-	if(r<4)
+	num_rolls++;
+	if(num_rolls<4)
 	{
 		f[1]=f[2]=f[3]=f[4]=f[5]=f[6]=0;
 		
@@ -86,7 +87,7 @@ function roll()
 		
 		for(var i=0;i<5;i++)
 		{
-			if(!h[i])
+			if(!held[i])
 			{
 				var a = document.getElementById("d"+i);
 				v[i] = Math.floor(6*Math.random()) + 1;
@@ -102,18 +103,36 @@ function roll()
 
 function hold(x)
 {
-	h[x] = !h[x];
+	held[x] = !held[x];
 	var a = document.getElementById("d"+x);
 	
-	if(h[x]) {a.src="pics/diceX"+v[x]+".gif";}
-	else {a.src="pics/diceX"+v[x]+".gif";}
+	if(held[x]) {a.src="pics/diceX"+v[x]+".gif";}
+	else {a.src="pics/dice"+v[x]+".gif";}
 }
 
-function scr(x)
+function score(x)
 {
 	var a = document.getElementById("s"+x);
 	a.innerHTML = f[x]*x;
 }
+
+function blah(x)
+{
+	if(!added_to_total[x])
+	{
+	var a = document.getElementById("s"+x);
+	a.innerHTML = "";
+	}
+}
+
+function add_to_total(x)
+{
+	added_to_total[x] = !added_to_total[x];
+	var a = document.getElementById("s"+x);
+	a.innerHTML = "<span style='font-size:20px'> f[x]*x </span>";
+}
+
+
 
 //-->
 </script>
@@ -138,9 +157,9 @@ function scr(x)
 		<td class='a'> 1's </td> 
 		<td class='b' 
 			id='s1' 
-			onMouseOver="scr()" 
-			onMouseOut="clr()" 
-			onClick="clk()"> 
+			onMouseOver="score(1)" 
+			onMouseOut="blah(1)" 
+			onClick="add_to_total(1)"> 
 		</td> 
 		
 		<td class='c' rowspan='5'> 
@@ -154,8 +173,8 @@ function scr(x)
 		
 		<td class='b' 
 			id='s2' 
-			onMouseOver="scr(2)" 
-			onMouseOut="" 
+			onMouseOver="score(2)" 
+			onMouseOut="blah(2)"; 
 			onClick=""> 
 		</td> 
 	</tr>

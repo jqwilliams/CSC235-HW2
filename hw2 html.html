@@ -75,6 +75,7 @@ var held = new Array(false,false,false,false,false);
 var added_to_total = new Array(false,false,false,false,false);
 var num_rolls = 0;
 var f = new Array(0,0,0,0,0,0);
+var totals = new Array(0,0,0,0,0,0,0,0,0)
 
 function roll()
 {
@@ -82,8 +83,6 @@ function roll()
 	if(num_rolls<4)
 	{
 		f[1]=f[2]=f[3]=f[4]=f[5]=f[6]=0;
-		
-		
 		
 		for(var i=0;i<5;i++)
 		{
@@ -112,11 +111,33 @@ function hold(x)
 
 function score(x)
 {
+	if(!added_to_total[x])
+	{
 	var a = document.getElementById("s"+x);
 	a.innerHTML = f[x]*x;
+	}
 }
 
-function blah(x)
+function three_score()
+{
+	if(!added_to_total[7])
+	{
+	var a = document.getElementById("s7");
+	
+	}
+}
+
+function four_score(x) 
+{
+
+}
+
+function yahtzee_score(x)
+{
+
+}
+
+function mouse_out(x)
 {
 	if(!added_to_total[x])
 	{
@@ -128,11 +149,39 @@ function blah(x)
 function add_to_total(x)
 {
 	added_to_total[x] = !added_to_total[x];
+	
 	var a = document.getElementById("s"+x);
-	a.innerHTML = "<span style='font-size:20px'> f[x]*x </span>";
+	if(added_to_total[x])
+	{
+		totals[x] = f[x]*x;
+		a.innerHTML = f[x]*x;
+		total_sum();
+		//a.innerHTML = "<span style= 'font-weight=bold'></span>";
+	}
+	else
+	{
+		added_to_total[x] = !added_to_total[x];
+	}
+	
+	//reset number of rolls and held dice
+	num_rolls = 0;
+	for(var i=0; i<5; i++)
+	{
+		held[i] = false;
+	}
+	
 }
 
-
+function total_sum()
+{
+	var sum = 0;
+	var a = document.getElementById("total");
+	for(var i = 0; i<totals.length; i++)
+	{
+		sum+=totals[i];
+	}
+	a.innerHTML = sum;
+}
 
 //-->
 </script>
@@ -158,7 +207,7 @@ function add_to_total(x)
 		<td class='b' 
 			id='s1' 
 			onMouseOver="score(1)" 
-			onMouseOut="blah(1)" 
+			onMouseOut="mouse_out(1)" 
 			onClick="add_to_total(1)"> 
 		</td> 
 		
@@ -174,50 +223,87 @@ function add_to_total(x)
 		<td class='b' 
 			id='s2' 
 			onMouseOver="score(2)" 
-			onMouseOut="blah(2)"; 
-			onClick=""> 
+			onMouseOut="mouse_out(2)"; 
+			onClick="add_to_total(2)"> 
 		</td> 
 	</tr>
 
 	<tr> 
 		<td class='a'> 3's </td> 
-		<td class='b'> </td> 
+		<td class='b'
+			id='s3' 
+			onMouseOver="score(3)" 
+			onMouseOut="mouse_out(3)" 
+			onClick="add_to_total(3)"> 
+		</td> 
 	</tr>
 
 	<tr> 
 		<td class='a'> 4's </td> 
-		<td class='b'> </td>  
+		<td class='b'
+			id='s4' 
+			onMouseOver="score(4)" 
+			onMouseOut="mouse_out(4)" 
+			onClick="add_to_total(4)"> 
+		</td>  
 	</tr>
 
 	<tr> 
 		<td class='a'> 5's </td> 
-		<td class='b'> </td> 
+		<td class='b'
+			id='s5' 
+			onMouseOver="score(5)" 
+			onMouseOut="mouse_out(5)" 
+			onClick="add_to_total(5)"> 
+		</td> 
 	</tr>
 
 	<tr> 
 		<td class='a'> 6's </td> 
-		<td class='b'> </td> 
-		<td class='c' rowspan='5'> <button class='b'> New Game </button> </td> 
+		<td class='b'
+			id='s6' 
+			onMouseOver="score(6)" 
+			onMouseOut="mouse_out(6)" 
+			onClick="add_to_total(6)"> 
+		</td> 
+		<td class='c' rowspan='5'> <button class='b' onClick="window.location.reload()"> New Game </button> </td> 
 	</tr>
 
 	<tr> 
 		<td class='a'> 3 of a kind </td> 
-		<td class='b'> </td> 
+		<td class='b'
+			id='s7'
+			onMouseOver="three_score(7)"
+			onMouseOut="mouse_out(7)"
+			onClick="add_to_total(7)"> 
+		</td> 
 	</tr>
 
 	<tr> 
 		<td class='a'> 4 of a kind </td> 
-		<td class='b'> </td> 
+		<td class='b'
+			id='s8'
+			onMouseOver="four_score(8)"
+			onMouseOut="mouse_out(8)"
+			onClick="add_to_total(8)"
+		> </td> 
 	</tr>
 
 	<tr> 
 		<td class='a'> Yahtzee </td> 
-		<td class='b'> </td> 
+		<td class='b'
+			id='s9'
+			onMouseOver="yahtzee_score(9)"
+			onMouseOut="mouse_out(9)"
+			onClick="add_to_total(9)"
+		> </td> 
 	</tr>
 
 	<tr> 
 		<td class='a'> Total </td> 
-		<td class='b'> </td> 
+		<td class='b'
+			id = 'total'> 
+		</td> 
 	</tr>
 
 </table>

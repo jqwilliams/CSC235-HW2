@@ -75,6 +75,7 @@ var held = new Array(false,false,false,false,false);
 var added_to_total = new Array(false,false,false,false,false);
 var num_rolls = 0;
 var f = new Array(0,0,0,0,0,0);
+var score = 0;
 var totals = new Array(0,0,0,0,0,0,0,0,0)
 
 function roll()
@@ -105,44 +106,187 @@ function hold(x)
 	held[x] = !held[x];
 	var a = document.getElementById("d"+x);
 	
-	if(held[x]) {a.src="pics/diceX"+v[x]+".gif";}
-	else {a.src="pics/dice"+v[x]+".gif";}
+	if(held[x]) 
+	{
+		a.src="pics/diceX"+v[x]+".gif";
+	}
+	else 
+	{
+		a.src="pics/dice"+v[x]+".gif";
+	}
 }
 
-function score(x)
+
+function show_score(x)
 {
-	if(!added_to_total[x])
-	{
 	var a = document.getElementById("s"+x);
-	a.innerHTML = f[x]*x;
-	}
-}
-
-function three_score()
-{
-	if(!added_to_total[7])
-	{
-	var a = document.getElementById("s7");
+	var unique = new Set(v);
 	
+	if(!added_to_total[x])
+	{		
+		
+		//3 of a kind
+		if(x==7)
+		{
+			if(unique.size<=3)
+			{
+				//special case check
+				if(unique.size==3)
+				{
+					if(max_duplicates(v)==3)
+					{
+						score = 222;
+					}
+					else
+					{
+						score = 333;
+					}
+					
+					/**var count0 = 0;
+					var count1 = 0;
+					var count2 = 0;
+					
+					for(var i=0; i<5; i++)
+					{
+						if(unique[0]==v[i])
+						{
+							count0+=1;
+						}
+					}
+					
+					for(var i=0; i<5; i++)
+					{
+						if(unique[1]==v[i])
+						{
+							count1+=1;
+						}
+					}
+					
+					for(var i=0; i<5; i++)
+					{
+						if(unique[2]==v[i])
+						{
+							count2+=1;
+						}
+					}
+					
+					//if(count0>2 || count1>2 || count2>2)
+					
+					if()
+					{
+						//there are 3 unique nums AND 3 of a kind
+						score = 222;
+					}
+					else
+					{
+						//there are 3 unique nums AND NOT 3 of a kind
+						score = 333;
+					}
+					
+					console.log("UNIQUE SIZE: 3");
+					console.log(count0, count1, count2);
+					**/
+				}
+				
+				else
+				{
+					//there are less than 3 unique nums
+					score = 111;
+				}
+			}
+			
+			//there are more than 4 unique nums
+			else
+			{
+				score = 999;
+			}
+		}
+		
+		//4 of a kind
+		else if(x==8)
+		{
+			if(unique.size<=2)
+			{
+				if(unique.size==2)
+				{
+					
+					/**
+					var four_count0 = 0;
+					var four_count1 = 0;
+					
+					for(var j = 0; j<5; j++)
+					{
+						if(unique[0]==v[j])
+						{
+							four_count0++;
+						}
+					}
+					
+					for(var j = 0; j<5; j++)
+					{
+						if(unique[1]==v[j])
+						{
+							four_count1++;
+						}
+					}
+					
+					
+					if(four_count0>3 || four_count1>3)
+					{
+						//there are 2 unique nums AND 4 of a kind
+						score = 222;
+					}
+					else
+					{
+						//there are 2 unique nums AND NOT 4 of a kind
+						score = 333;
+					}
+					**/
+				}
+				//there are less than 2 unique nums
+				else
+				{
+					score = 111;
+				}
+			}
+			
+			//there are more than 2 unique nums
+			else
+			{
+				score = 999;
+			}
+		}
+		
+		
+		
+		//Yahtzee
+		else if(x==9)
+		{
+			if(unique.size==1)
+			{
+				score = 111;
+			}
+			else
+			{
+				score = 999;
+			}
+		}
+	
+		else
+		{
+			score = f[x]*x;
+		}
+		
+		a.innerHTML = score;
 	}
-}
-
-function four_score(x) 
-{
-
-}
-
-function yahtzee_score(x)
-{
-
 }
 
 function mouse_out(x)
 {
 	if(!added_to_total[x])
 	{
-	var a = document.getElementById("s"+x);
-	a.innerHTML = "";
+		var a = document.getElementById("s"+x);
+		a.innerHTML = "";
 	}
 }
 
@@ -151,12 +295,12 @@ function add_to_total(x)
 	added_to_total[x] = !added_to_total[x];
 	
 	var a = document.getElementById("s"+x);
+	
 	if(added_to_total[x])
 	{
-		totals[x] = f[x]*x;
-		a.innerHTML = f[x]*x;
+		totals[x] = score;
+		a.innerHTML = score;
 		total_sum();
-		//a.innerHTML = "<span style= 'font-weight=bold'></span>";
 	}
 	else
 	{
@@ -183,6 +327,34 @@ function total_sum()
 	a.innerHTML = sum;
 }
 
+function frequency(array, length, value)
+{
+	let count = 0;
+	for (let i=0; i < length; i++)
+	if (array[i] == value)
+	{
+		count++;
+	}
+	return count;
+}
+
+function max_duplicates(array)
+{
+	var nums = new Set();
+	
+	nums[0] = frequency(array, array.length(), 1);
+	nums[1] = frequency(array, array.length(), 2);
+	nums[2] = frequency(array, array.length(), 3);
+	nums[3] = frequency(array, array.length(), 4);
+	nums[4] = frequency(array, array.length(), 5);
+	nums[5] = frequency(array, array.length(), 6);
+	
+	var num_array = new Array(nums);
+	var max_num = arr.reduce(function (x, y) {
+	return Math.max(x, y);
+	});
+}
+
 //-->
 </script>
 
@@ -206,7 +378,7 @@ function total_sum()
 		<td class='a'> 1's </td> 
 		<td class='b' 
 			id='s1' 
-			onMouseOver="score(1)" 
+			onMouseOver="show_score(1)" 
 			onMouseOut="mouse_out(1)" 
 			onClick="add_to_total(1)"> 
 		</td> 
@@ -222,7 +394,7 @@ function total_sum()
 		
 		<td class='b' 
 			id='s2' 
-			onMouseOver="score(2)" 
+			onMouseOver="show_score(2)" 
 			onMouseOut="mouse_out(2)"; 
 			onClick="add_to_total(2)"> 
 		</td> 
@@ -232,7 +404,7 @@ function total_sum()
 		<td class='a'> 3's </td> 
 		<td class='b'
 			id='s3' 
-			onMouseOver="score(3)" 
+			onMouseOver="show_score(3)" 
 			onMouseOut="mouse_out(3)" 
 			onClick="add_to_total(3)"> 
 		</td> 
@@ -242,7 +414,7 @@ function total_sum()
 		<td class='a'> 4's </td> 
 		<td class='b'
 			id='s4' 
-			onMouseOver="score(4)" 
+			onMouseOver="show_score(4)" 
 			onMouseOut="mouse_out(4)" 
 			onClick="add_to_total(4)"> 
 		</td>  
@@ -252,7 +424,7 @@ function total_sum()
 		<td class='a'> 5's </td> 
 		<td class='b'
 			id='s5' 
-			onMouseOver="score(5)" 
+			onMouseOver="show_score(5)" 
 			onMouseOut="mouse_out(5)" 
 			onClick="add_to_total(5)"> 
 		</td> 
@@ -262,7 +434,7 @@ function total_sum()
 		<td class='a'> 6's </td> 
 		<td class='b'
 			id='s6' 
-			onMouseOver="score(6)" 
+			onMouseOver="show_score(6)" 
 			onMouseOut="mouse_out(6)" 
 			onClick="add_to_total(6)"> 
 		</td> 
@@ -273,7 +445,7 @@ function total_sum()
 		<td class='a'> 3 of a kind </td> 
 		<td class='b'
 			id='s7'
-			onMouseOver="three_score(7)"
+			onMouseOver="show_score(7)"
 			onMouseOut="mouse_out(7)"
 			onClick="add_to_total(7)"> 
 		</td> 
@@ -283,7 +455,7 @@ function total_sum()
 		<td class='a'> 4 of a kind </td> 
 		<td class='b'
 			id='s8'
-			onMouseOver="four_score(8)"
+			onMouseOver="show_score(8)"
 			onMouseOut="mouse_out(8)"
 			onClick="add_to_total(8)"
 		> </td> 
@@ -293,7 +465,7 @@ function total_sum()
 		<td class='a'> Yahtzee </td> 
 		<td class='b'
 			id='s9'
-			onMouseOver="yahtzee_score(9)"
+			onMouseOver="show_score(9)"
 			onMouseOut="mouse_out(9)"
 			onClick="add_to_total(9)"
 		> </td> 

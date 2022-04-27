@@ -73,6 +73,7 @@ table
 var v = new Array(0,0,0,0,0);
 var held = new Array(false,false,false,false,false);
 var added_to_total = new Array(false,false,false,false,false);
+var score_set = new Boolean(false);
 var num_rolls = 0;
 var f = new Array(0,0,0,0,0,0);
 var score = 0;
@@ -80,7 +81,10 @@ var totals = new Array(0,0,0,0,0,0,0,0,0)
 
 function roll()
 {
+	score_set = false;
+	
 	num_rolls++;
+	
 	if(num_rolls<4)
 	{
 		f[1]=f[2]=f[3]=f[4]=f[5]=f[6]=0;
@@ -133,72 +137,27 @@ function show_score(x)
 				//special case check
 				if(unique.size==3)
 				{
-					if(max_duplicates(v)==3)
+					if(count_duplicates(v)==3)
 					{
-						score = 222;
+						score = sum(v);
 					}
 					else
 					{
-						score = 333;
+						score = 0;
 					}
-					
-					/**var count0 = 0;
-					var count1 = 0;
-					var count2 = 0;
-					
-					for(var i=0; i<5; i++)
-					{
-						if(unique[0]==v[i])
-						{
-							count0+=1;
-						}
-					}
-					
-					for(var i=0; i<5; i++)
-					{
-						if(unique[1]==v[i])
-						{
-							count1+=1;
-						}
-					}
-					
-					for(var i=0; i<5; i++)
-					{
-						if(unique[2]==v[i])
-						{
-							count2+=1;
-						}
-					}
-					
-					//if(count0>2 || count1>2 || count2>2)
-					
-					if()
-					{
-						//there are 3 unique nums AND 3 of a kind
-						score = 222;
-					}
-					else
-					{
-						//there are 3 unique nums AND NOT 3 of a kind
-						score = 333;
-					}
-					
-					console.log("UNIQUE SIZE: 3");
-					console.log(count0, count1, count2);
-					**/
 				}
 				
 				else
 				{
 					//there are less than 3 unique nums
-					score = 111;
+					score = sum(v);
 				}
 			}
 			
 			//there are more than 4 unique nums
 			else
 			{
-				score = 999;
+				score = 0;
 			}
 		}
 		
@@ -209,51 +168,29 @@ function show_score(x)
 			{
 				if(unique.size==2)
 				{
-					
-					/**
-					var four_count0 = 0;
-					var four_count1 = 0;
-					
-					for(var j = 0; j<5; j++)
-					{
-						if(unique[0]==v[j])
-						{
-							four_count0++;
-						}
-					}
-					
-					for(var j = 0; j<5; j++)
-					{
-						if(unique[1]==v[j])
-						{
-							four_count1++;
-						}
-					}
-					
-					
-					if(four_count0>3 || four_count1>3)
+					if(count_duplicates(v)==4)
 					{
 						//there are 2 unique nums AND 4 of a kind
-						score = 222;
+						score = sum(v);
 					}
 					else
 					{
 						//there are 2 unique nums AND NOT 4 of a kind
-						score = 333;
+						score = 0;
 					}
-					**/
 				}
+				
 				//there are less than 2 unique nums
 				else
 				{
-					score = 111;
+					score = sum(v);
 				}
 			}
 			
 			//there are more than 2 unique nums
 			else
 			{
-				score = 999;
+				score = 0;
 			}
 		}
 		
@@ -264,11 +201,11 @@ function show_score(x)
 		{
 			if(unique.size==1)
 			{
-				score = 111;
+				score = v[0]*5;
 			}
 			else
 			{
-				score = 999;
+				score = 0;
 			}
 		}
 	
@@ -292,28 +229,42 @@ function mouse_out(x)
 
 function add_to_total(x)
 {
-	added_to_total[x] = !added_to_total[x];
 	
-	var a = document.getElementById("s"+x);
-	
-	if(added_to_total[x])
-	{
-		totals[x] = score;
-		a.innerHTML = score;
-		total_sum();
-	}
-	else
+	if(score_set == false)
 	{
 		added_to_total[x] = !added_to_total[x];
+		
+		var a = document.getElementById("s"+x);
+		
+		if(added_to_total[x])
+		{
+			totals[x] = score;
+			a.innerHTML = score;
+			total_sum();
+		}
+		else
+		{
+			added_to_total[x] = !added_to_total[x];
+		}
+		
+		//reset number of rolls and held dice
+		num_rolls = 0;
+		for(var i=0; i<5; i++)
+		{
+			held[i] = false;
+		}
+		score_set = true;
 	}
-	
-	//reset number of rolls and held dice
-	num_rolls = 0;
-	for(var i=0; i<5; i++)
+}
+
+function sum(v)
+{
+	var sum = 0;
+	for(var i = 0; i<5; i++)
 	{
-		held[i] = false;
+		sum+=v[i];
 	}
-	
+	return sum;
 }
 
 function total_sum()
@@ -327,33 +278,80 @@ function total_sum()
 	a.innerHTML = sum;
 }
 
-function frequency(array, length, value)
+
+function count_duplicates(v)
 {
-	let count = 0;
-	for (let i=0; i < length; i++)
-	if (array[i] == value)
-	{
-		count++;
+	var counter = new Array(0,0,0,0,0,0);
+	var count1 = 0;
+	var count2 = 0;
+	var count3 = 0;
+	var count4 = 0;
+	var count5 = 0;
+	var count6 = 0;
+	
+	for(var i=0; i<5; i++)
+	{	
+		if(v[i]==1)
+		{
+			count1++;
+		}
 	}
-	return count;
+	counter[0] = count1;
+	
+	for(var i=0; i<5; i++)
+	{
+		if(v[i]==2)
+		{
+			count2++;
+		}
+	}
+	counter[1] = count2;
+	
+	for(var i=0; i<5; i++)
+	{
+		if(v[i]==3)
+		{
+			count3++;
+		}
+	}
+	counter[2] = count3;
+	
+	for(var i=0; i<5; i++)
+	{
+		if(v[i]==4)
+		{
+			count4++;
+		}
+	}
+	counter[3] = count4;
+	
+	for(var i=0; i<5; i++)
+	{	
+		if(v[i]==5)
+		{
+			count5++;
+		}
+	}
+	counter[4] = count5;
+	
+	for(var i=0; i<5; i++)
+	{	
+		if(v[i]==6)
+		{
+			count6++;
+		}
+	}
+	counter[5] = count6;
+	
+	var max = counter.reduce(function(a, b){ return Math.max(a, b); }, -Infinity);
+	
+	//console.log(counter);
+	//console.log(max);
+	
+	return max;
 }
 
-function max_duplicates(array)
-{
-	var nums = new Set();
-	
-	nums[0] = frequency(array, array.length(), 1);
-	nums[1] = frequency(array, array.length(), 2);
-	nums[2] = frequency(array, array.length(), 3);
-	nums[3] = frequency(array, array.length(), 4);
-	nums[4] = frequency(array, array.length(), 5);
-	nums[5] = frequency(array, array.length(), 6);
-	
-	var num_array = new Array(nums);
-	var max_num = arr.reduce(function (x, y) {
-	return Math.max(x, y);
-	});
-}
+
 
 //-->
 </script>
